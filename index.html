@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://js.jotform.com/JotForm.js"></script>
+</head>
+<body>
+    <div id="status">Connecting to Wealthbox...</div>
+    <script>
+        // Jotform sends formId and apiKey via POST/URL Params to this iframe
+        const urlParams = new URLSearchParams(window.location.search);
+        const formId = urlParams.get('formId');
+        const apiKey = urlParams.get('apiKey');
+
+        JF.initialize({ apiKey: apiKey });
+
+        // REPLACE THIS with your Firebase Function URL (from Step 2)
+        const firebaseWebhookUrl = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/syncJotformToWealthbox";
+
+        // This creates the 'trigger' on the form
+        JF.createFormWebhook(formId, firebaseWebhookUrl, function(response) {
+            document.getElementById('status').innerHTML = "✅ Sync Active! Closing...";
+            setTimeout(() => {
+                JF.complete(); // Closes the integration window in Jotform
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
