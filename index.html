@@ -180,7 +180,12 @@
                         });
                     });
                     Object.entries(grouped).forEach(([name, values]) => {
-                        push(finalFields, pfx(name), values.join(', '));
+                        if (values.length > 1) {
+                            // Multi-select: pass an array so each checkbox option is ticked
+                            finalFields.push({ label: pfx(name), value: values });
+                        } else {
+                            push(finalFields, pfx(name), values[0]);
+                        }
                     });
                 }
 
